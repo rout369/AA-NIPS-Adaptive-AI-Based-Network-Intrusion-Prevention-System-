@@ -462,8 +462,7 @@ case *layers.IPv6:
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/yourusername/ml-adaptive-firewall
-cd ml-adaptive-firewall
+git clone https://github.com/rout369/AA-NIPS-Adaptive-AI-Based-Network-Intrusion-Prevention-System-
 
 # 2. Setup ML environment
 cd ml_pipeline
@@ -594,22 +593,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 | **Year** | 2025 |
 | **Keywords** | Network Security, Machine Learning, Firewall, DDoS, Intrusion Detection |
 | **Technologies** | Python, scikit-learn, Go, gopacket, PCAP |
-| **GitHub** | [github.com/yourusername/ml-adaptive-firewall](https://github.com/yourusername/ml-adaptive-firewall) |
-
----
-
-## 🎯 **FINAL WORD**
-
-This project successfully demonstrates that **Machine Learning can enhance traditional firewall systems** by:
-
-1. **Automating threat detection** - No need for manual rule writing
-2. **Identifying unknown attacks** - Pattern recognition finds zero-days
-3. **Reducing response time** - From hours/days to milliseconds
-4. **Continuous improvement** - Feedback loop makes the system smarter
-
-**The code works. The demos work. The concept is proven.**
-
-*What you do with it next is up to you.*
+| **GitHub** | [github.com/rout369/AA-NIPS-Adaptive-AI-Based-Network-Intrusion-Prevention-System-]([https://github.com/yourusername/ml-adaptive-firewall](https://github.com/rout369/AA-NIPS-Adaptive-AI-Based-Network-Intrusion-Prevention-System-)) |
 
 ---
 
