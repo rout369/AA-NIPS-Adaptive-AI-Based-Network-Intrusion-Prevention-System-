@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSL-KDD Dataset | Network Security Research</title>
+    <!-- Modern fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        /* Modern CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #1a1a2c;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Glassmorphism Card Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Header Section */
+        .header-section {
+            background: linear-gradient(135deg, #1a1a2c 0%, #16213e 100%);
+            color: white;
+            border-radius: 24px;
+            padding: 60px 40px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .header-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        .section-header i {
+            font-size: 2rem;
+            color: #667eea;
+            margin-right: 15px;
+        }
+
+        .section-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a2c;
+            margin: 0;
+        }
+
+        /* Abstract Text */
+        .abstract-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #4a4a6a;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #667eea20 0%, #764ba220 100%);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+            color: #667eea;
+        }
+
+        /* Data Files Grid */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .data-card {
+            background: #f8f9fc;
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+        }
+
+        .data-card:hover {
+            background: white;
+            border-color: #667eea;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.1);
+            transform: scale(1.02);
+        }
+
+        .data-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-size: 1.3rem;
+        }
+
+        .data-content {
+            flex: 1;
+        }
+
+        .data-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #1a1a2c;
+        }
+
+        .data-title a {
+            color: #1a1a2c;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .data-title a:hover {
+            color: #667eea;
+        }
+
+        .data-desc {
+            font-size: 0.9rem;
+            color: #6c757d;
+            line-height: 1.5;
+        }
+
+        /* Stats Tables */
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .stats-table-wrapper {
+            background: #f8f9fc;
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .stats-table-wrapper:hover {
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a1a2c;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .modern-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .modern-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 15px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .modern-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+            color: #4a4a6a;
+        }
+
+        .modern-table tr:hover td {
+            background: #f1f3f9;
+        }
+
+        .stat-highlight {
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        /* Benefits List */
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .benefits-list li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fc;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .benefits-list li:hover {
+            background: white;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .benefit-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea20, #764ba220);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        /* Charts Section */
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .chart-card {
+            background: #f8f9fc;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .chart-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .chart-card img:hover {
+            transform: scale(1.02);
+        }
+
+        .chart-caption {
+            margin-top: 15px;
+            font-weight: 600;
+            color: #1a1a2c;
+        }
+
+        /* References Section */
+        .references {
+            background: #f8f9fc;
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .reference-item {
+            padding: 15px;
+            border-left: 3px solid #667eea;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .reference-item:hover {
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .reference-item i {
+            color: #667eea;
+            margin-right: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2.5rem;
+            }
+            
+            .stats-container,
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .glass-card {
+                padding: 25px;
+            }
+            
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        [data-aos] {
+            opacity: 0;
+            transition-property: opacity, transform;
+        }
+
+        [data-aos].aos-animate {
+            opacity: 1;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2, #667eea);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Header Section -->
+        <div class="header-section" data-aos="fade-down">
+            <h1 class="header-title">
+                <i class="fas fa-shield-halbed" style="margin-right: 15px;"></i>
+                NSL-KDD Dataset
+            </h1>
+            <p class="header-subtitle">
+                A refined benchmark dataset for network intrusion detection systems, 
+                addressing critical limitations of the original KDD'99 dataset.
+            </p>
+            <div style="margin-top: 30px;">
+                <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 50px; font-size: 0.9rem;">
+                    <i class="fas fa-database"></i> Version 1.0
+                </span>
+                <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 50px; font-size: 0.9rem; margin-left: 15px;">
+                    <i class="fas fa-chart-line"></i> 125,973 records
+                </span>
+            </div>
+        </div>
+
+        <!-- Abstract Section -->
+        <div class="glass-card" data-aos="fade-up">
+            <div class="section-header">
+                <i class="fas fa-scroll"></i>
+                <h2>Abstract</h2>
+            </div>
+            <p class="abstract-text">
+                <span class="highlight">NSL-KDD</span> is a refined dataset designed to overcome inherent limitations 
+                of the KDD'99 dataset. While acknowledging McHugh's critical analysis [2], this dataset serves as an 
+                effective benchmark for network-based intrusion detection systems research. With reasonable record 
+                counts in both training and testing sets, it enables comprehensive experiments without random sampling, 
+                ensuring consistent and comparable evaluation results across different research works.
+            </p>
+        </div>
+
+        <!-- Data Files Section -->
+        <div class="glass-card" data-aos="fade-up">
+            <div class="section-header">
+                <i class="fas fa-database"></i>
+                <h2>Dataset Downloads</h2>
+            </div>
+            
+            <div class="data-grid">
+                <!-- KDDTrain+ ARFF -->
+                <div class="data-card">
+                    <div class="data-icon">
+                        <i class="fas fa-file-code"></i>
+                    </div>
+                    <div class="data-content">
+                        <div class="data-title">
+                            <a href="http://nsl.cs.unb.ca/NSL-KDD/KDDTrain+.arff" target="_blank">
+                                KDDTrain+.ARFF <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i>
+                            </a>
+                        </div>
+                        <div class="data-desc">Full training set with binary labels in ARFF format</div>
+                    </div>
+                </div>
+
+                <!-- KDDTrain+ TXT -->
+                <div class="data-card">
+                    <div class="data-icon">
+                        <i class="fas fa-file-csv"></i>
+                    </div>
+                    <div class="data-content">
+                        <div class="data-title">
+                            <a href="http://nsl.cs.unb.ca/NSL-KDD/KDDTrain+.txt" target="_blank">
+                                KDDTrain+.TXT <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i>
+                            </a>
+                        </div>
+                        <div class="data-desc">Full training set with attack-type labels & difficulty level</div>
+                    </div>
+                </div>
+
+                <!-- 20% Subset -->
+                <div class="data-card">
+                    <div class="data-icon">
+                        <i class="fas fa-percent"></i>
+                    </div>
+                    <div class="data-content">
+                        <div class="data-title">
+                            <a href="http://nsl.cs.unb.ca/NSL-KDD/KDDTrain+_20Percent.arff" target="_blank">
+                                KDDTrain+_20Percent.ARFF <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                        <div class="data-desc">20% subset of training set in ARFF format</div>
+                    </div>
+                </div>
+
+                <!-- KDDTest+ ARFF -->
+                <div class="data-card">
+                    <div class="data-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <div class="data-content">
+                        <div class="data-title">
+                            <a href="http://nsl.cs.unb.ca/NSL-KDD/KDDTest+.arff" target="_blank">
+                                KDDTest+.ARFF <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                        <div class="data-desc">Full test set with binary labels in ARFF format</div>
+                    </div>
+                </div>
+
+                <!-- KDDTest-21 -->
+                <div class="data-card">
+                    <div class="data-icon">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <div class="data-content">
+                        <div class="data-title">
+                            <a href="http://nsl.cs.unb.ca/NSL-KDD/KDDTest-21.arff" target="_blank">
+                                KDDTest-21.ARFF <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </div>
+                        <div class="data-desc">Test subset excluding difficulty level 21 records</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Improvements Section -->
+        <div class="glass-card" data-aos="fade-up">
+            <div class="section-header">
+                <i class="fas fa-arrow-trend-up"></i>
+                <h2>Key Improvements</h2>
+            </div>
+            
+            <ul class="benefits-list">
+                <li>
+                    <div class="benefit-icon">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <div>
+                        <strong style="color: #1a1a2c; font-size: 1.1rem;">No Redundant Records</strong>
+                        <p style="color: #6c757d; margin-top: 5px;">Eliminates duplicate records in training set, preventing classifier bias towards frequent records.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-simple"></i>
+                    </div>
+                    <div>
+                        <strong style="color: #1a1a2c; font-size: 1.1rem;">Unbiased Test Sets</strong>
+                        <p style="color: #6c757d; margin-top: 5px;">No duplicate records in test sets, ensuring fair performance evaluation.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="benefit-icon">
+                        <i class="fas fa-scale-balanced"></i>
+                    </div>
+                    <div>
+                        <strong style="color: #1a1a2c; font-size: 1.1rem;">Balanced Difficulty Levels</strong>
+                        <p style="color: #6c757d; margin-top: 5px;">Inversely proportional selection from difficulty groups for better evaluation granularity.</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="benefit-icon">
+                        <i class="fas fa-computer"></i>
+                    </div>
+                    <div>
+                        <strong style="color: #1a1a2c; font-size: 1.1rem;">Affordable Size</strong>
+                        <p style="color: #6c757d; margin-top: 5px;">Reasonable record counts enable full dataset experiments without random sampling.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Statistical Analysis Section -->
+        <div class="glass-card" data-aos="fade-up">
+            <div class="section-header">
+                <i class="fas fa-chart-pie"></i>
+                <h2>Statistical Analysis</h2>
+            </div>
+            
+            <p class="abstract-text">
+                The original KDD dataset suffered from massive redundancy (4.9M records → 1.07M distinct), 
+                causing learning algorithms to bias toward frequent records. This issue particularly affected 
+                U2R and R2L attacks - the most harmful network threats. Our analysis reveals the extent of 
+                this redundancy problem:
+            </p>
+
+            <div class="stats-container">
+                <!-- Training Set Stats -->
+                <div class="stats-table-wrapper">
+                    <div class="stats-title">
+                        <i class="fas fa-graduation-cap" style="margin-right: 10px;"></i>
+                        Training Set Statistics
+                    </div>
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Original</th>
+                                <th>Distinct</th>
+                                <th>Reduction</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Attacks</strong></td>
+                                <td>3,925,650</td>
+                                <td>262,178</td>
+                                <td class="stat-highlight">93.32%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Normal</strong></td>
+                                <td>972,781</td>
+                                <td>812,814</td>
+                                <td class="stat-highlight">16.44%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td>4,898,431</td>
+                                <td>1,074,992</td>
+                                <td class="stat-highlight">78.05%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Test Set Stats -->
+                <div class="stats-table-wrapper">
+                    <div class="stats-title">
+                        <i class="fas fa-vial" style="margin-right: 10px;"></i>
+                        Test Set Statistics
+                    </div>
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Original</th>
+                                <th>Distinct</th>
+                                <th>Reduction</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Attacks</strong></td>
+                                <td>250,436</td>
+                                <td>29,378</td>
+                                <td class="stat-highlight">88.26%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Normal</strong></td>
+                                <td>60,591</td>
+                                <td>47,911</td>
+                                <td class="stat-highlight">20.92%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td>311,027</td>
+                                <td>77,289</td>
+                                <td class="stat-highlight">75.15%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; padding: 20px; background: linear-gradient(135deg, #667eea10, #764ba210); border-radius: 12px;">
+                <p style="color: #4a4a6a; font-style: italic;">
+                    <i class="fas fa-info-circle" style="color: #667eea; margin-right: 10px;"></i>
+                    Through comprehensive analysis with 21 different learners, we discovered that 98% of training records 
+                    and 86% of test records were correctly classified by all models, leading to the development of 
+                    difficulty-level annotations.
+                </p>
+            </div>
+        </div>
+
+        <!-- Difficulty Level Analysis -->
+        <div class="glass-card" data-aos="fade-up">
+            <div class="section-header">
+                <i class="fas fa-chart-line"></i>
+                <h2>Difficulty Level Distribution</h2>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-card">
+                    <img src="KDDTrain1.jpg" alt="Training Set Difficulty Distribution">
+                    <div class="chart-caption">
+                        <i class="fas fa-arrow-right" style="color: #667eea; margin-right: 8px;"></i>
+                        Training Set: #successfulPrediction Distribution
+                    </div>
+                    <p style="color: #6c757d; margin-top: 10px; font-size: 0.9rem;">
+                        98% of records correctly classified by all 21 learners
+                    </p>
+                </div>
+                
+                <div class="chart-card">
+                    <img src="KDDTest1.jpg" alt="Test Set Difficulty Distribution">
+                    <div class="chart-caption">
+                        <i class="fas fa-arrow-right" style="color: #667eea; margin-right: 8px;"></i>
+                        Test Set: #successfulPrediction Distribution
+                    </div>
+                    <p style="color: #6c757d; margin-top: 10px; font-size: 0.9rem;">
+                        86% of records correctly classified by all 21 learners
+                    </p>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 16px; color: white;">
+                <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1;">
+                        <h3 style="margin-bottom: 10px; font-weight: 700;">Methodology</h3>
+                        <p style="opacity: 0.9; line-height: 1.6;">
+                            Three random 50K-record subsets were used to train 7 different learners (21 total models). 
+                            Each record received a #successfulPrediction score (0-21) based on correct classifications. 
+                            This rigorous annotation process ensures reliable difficulty assessment for benchmarking.
+                        </p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 12px; min-width: 200px;">
+                        <i class="fas fa-robot" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <div style="font-size: 1.5rem; font-weight: 700;">21</div>
+                        <div style="opacity: 0.9;">Learner Models</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- References -->
+        <div class="glass-card" data-aos="fade-up">
+            <div class="section-header">
+                <i class="fas fa-book"></i>
+                <h2>References</h2>
+            </div>
+            
+            <div class="references">
+                <div class="reference-item">
+                    <i class="fas fa-quote-right"></i>
+                    <strong>[1]</strong> M. Tavallaee, E. Bagheri, W. Lu, and A. Ghorbani, 
+                    "A Detailed Analysis of the KDD CUP 99 Data Set," 
+                    <em>Submitted to Second IEEE Symposium on Computational Intelligence for Security and Defense Applications (CISDA)</em>, 2009.
+                </div>
+                
+                <div class="reference-item">
+                    <i class="fas fa-quote-right"></i>
+                    <strong>[2]</strong> J. McHugh, "Testing intrusion detection systems: a critique of the 1998 and 1999 DARPA intrusion detection system evaluations as performed by Lincoln Laboratory," 
+                    <em>ACM Transactions on Information and System Security</em>, vol. 3, no. 4, pp. 262–294, 2000.
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer" data-aos="fade-up">
+            <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 50px; padding: 20px; display: inline-block;">
+                <i class="fas fa-shield" style="margin-right: 10px;"></i>
+                NSL-KDD Dataset | Network Security Research Benchmark
+                <br>
+                <span style="opacity: 0.8; font-size: 0.9rem;">
+                    <i class="fas fa-code-branch"></i> Maintained by the research community | 
+                    <a href="#" style="color: white;">Documentation</a> • 
+                    <a href="#" style="color: white;">Cite</a> • 
+                    <a href="#" style="color: white;">GitHub</a>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- AOS Animation Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+</html>
