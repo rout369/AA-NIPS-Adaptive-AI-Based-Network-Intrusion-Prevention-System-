@@ -109,6 +109,30 @@ models = {
 # -----------------------------
 # TRAIN AND EVALUATE ALL MODELS
 # -----------------------------
+# =============================================================================
+# MODEL TRAINING AND EVALUATION PIPELINE
+# =============================================================================
+# This block iterates through all machine learning models stored in the
+# `models` dictionary and performs the following steps for each model:
+#
+# 1. Trains the model using the scaled training dataset.
+# 2. Measures training time for performance benchmarking.
+# 3. Generates predictions on the scaled test dataset.
+# 4. Measures prediction time (inference speed).
+# 5. Computes evaluation metrics:
+#       - Accuracy
+#       - Precision
+#       - Recall
+#       - F1-Score
+# 6. Calculates the malicious prediction rate (percentage of samples
+#    predicted as malicious) to analyze class bias.
+# 7. Stores all metrics and timing results in the `results` list
+#    for later comparison and ranking.
+#
+# This allows systematic benchmarking and comparison of multiple
+# models in terms of both performance and computational efficiency.
+# =============================================================================
+
 results = []
 
 print("\nTraining and evaluating multiple models...")
@@ -762,6 +786,7 @@ else:
 print("\n" + "="*80)
 print("ANALYSIS COMPLETE")
 print("="*80)
+
 
 
 
