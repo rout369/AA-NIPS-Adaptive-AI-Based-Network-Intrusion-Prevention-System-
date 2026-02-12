@@ -211,6 +211,7 @@ import (
 )
 
 // Firewall represents our enhanced network security system
+// Firewall represents the core network security system that manages firewall rules, controls allowed and blocked IPs, tracks active connections, monitors connection rates for DDoS protection, maintains overall traffic statistics, and handles logging of network activities. It uses mutex locks to ensure thread-safe concurrent access to shared data structures and optionally writes logs to a file for persistent storage.
 type Firewall struct {
     mu                sync.RWMutex       // Protects concurrent access to rules
     rules             []Rule             // List of firewall rules
@@ -922,3 +923,4 @@ func (fw *Firewall) GetLogStats()  map[string]int{
     return stats
 
 }
+
