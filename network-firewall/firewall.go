@@ -332,6 +332,9 @@ func (fw *Firewall) AddRule(ruleType, sourceIP, dest, protocol, description stri
 }
 
 // AddRuleWithPriority adds a new firewall rule with custom priority
+//AddRuleWithPriority validates inputs, creates a new firewall rule,
+// inserts it in priority order, updates quick-lookup maps,
+// and returns the rule ID or an error message.
 func (fw *Firewall) AddRuleWithPriority(ruleType, sourceIP, dest, protocol, description string, port int, priority int) string {
     fw.mu.Lock()
     defer fw.mu.Unlock()
@@ -917,4 +920,5 @@ func (fw *Firewall) GetLogStats()  map[string]int{
     stats["blocked_logs"] = blocked
 
     return stats
+
 }
