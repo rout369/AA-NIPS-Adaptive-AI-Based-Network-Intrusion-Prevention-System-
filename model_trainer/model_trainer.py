@@ -39,6 +39,7 @@ USE_FULL_DATASET = False
 # -----------------------------
 # LOAD DATASET
 # -----------------------------
+# This code loads the dataset from the specified CSV file path into a pandas DataFrame, prints the overall shape of the dataset (number of rows and columns), displays the list of column names to understand the dataset structure, and shows the distribution of values in the 'label' column to analyze class balance before further preprocessing or model training.
 df = pd.read_csv(CSV_PATH)
 print("Dataset shape:", df.shape)
 print("Columns:", df.columns.tolist())
@@ -786,6 +787,7 @@ else:
 print("\n" + "="*80)
 print("ANALYSIS COMPLETE")
 print("="*80)
+
 
 
 
