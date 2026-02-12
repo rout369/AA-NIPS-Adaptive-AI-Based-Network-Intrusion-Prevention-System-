@@ -227,18 +227,23 @@ type Firewall struct {
 
 
 
+// LogEntry represents a firewall/network traffic log record.
+// It stores connection details, protocol, rule evaluation result,
+// and rate information for monitoring and security analysis.
 type LogEntry struct {
     Timestamp     time.Time `json:"timestamp"`
     SourceIP      string    `json:"source_ip"`
     DestIP        string    `json:"dest_ip"`
     Port          int       `json:"port"`
-    Protocol      string    `json:"protocol"`
-    Action        string    `json:"action"`      // "ALLOW" or "BLOCK"
-    Reason        string    `json:"reason"`      // "RULE_MATCH", "DDOS_BLOCK", etc.
+    Protocol      string    `json:"p rotocol"`
+    Action        string    `json:"action"`      
+    Reason        string    `json:"reason"`      
     RuleID        string    `json:"rule_id"`
     ConnectionID  string    `json:"connection_id"`
-    CountPerMin   int       `json:"count_per_min"` // Current rate
+    CountPerMin   int       `json:"count_per_min"`
 }
+
+
 
 // log reasons constants
 
