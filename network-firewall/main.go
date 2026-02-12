@@ -466,6 +466,9 @@ func main() {
 }
 
 // 🆕 Start real-time packet monitoring with firewall
+// startRealTimeMonitoring initializes and starts live packet monitoring with firewall integration.
+// It auto-selects a network interface and runs the system in detection mode (no active blocking).
+// Captures and analyzes real-time network traffic using the enhanced packet monitor.
 func startRealTimeMonitoring(fw *Firewall) {
 	fmt.Println("🚀 Starting Real-Time Packet Monitor with Firewall Integration")
 	fmt.Println("📡 Looking for network interfaces...")
@@ -886,4 +889,5 @@ func startRealServer(fw *Firewall, port int) {
 
 func clearScreen() {
     fmt.Print("\033[H\033[2J")
+
 }
