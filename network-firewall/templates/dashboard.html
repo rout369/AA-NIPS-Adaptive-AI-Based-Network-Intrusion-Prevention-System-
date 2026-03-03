@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firewall Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-blue-400">🛡️ Firewall Dashboard</h1>
+            <div class="text-sm text-gray-400">
+                Last updated: <span id="update-time"></span>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-gray-800 rounded-lg p-4">
+                <div class="text-gray-400 text-sm">Total Connections</div>
+                <div class="text-2xl font-bold" id="total-conn">0</div>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-4">
+                <div class="text-gray-400 text-sm">Allowed</div>
+                <div class="text-2xl font-bold text-green-400" id="total-allowed">0</div>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-4">
+                <div class="text-gray-400 text-sm">Blocked</div>
+                <div class="text-2xl font-bold text-red-400" id="total-blocked">0</div>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-4">
+                <div class="text-gray-400 text-sm">Feedback</div>
+                <div class="text-2xl font-bold text-yellow-400" id="feedback-count">0</div>
+            </div>
+        </div>
+
+        <!-- Threat Level Distribution -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div class="bg-gray-800 rounded-lg p-4">
+                <h2 class="text-lg font-semibold mb-4">Threat Distribution</h2>
+                <canvas id="threatChart"></canvas>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-4">
+                <h2 class="text-lg font-semibold mb-4">Feedback Stats</h2>
+                <canvas id="feedbackChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-gray-800 rounded-lg p-4 mb-4">
+            <div class="flex flex-wrap gap-4">
+                <input type="text" id="filter-ip" placeholder="Filter by IP..." 
+                       class="bg-gray-700 text-white px-3 py-2 rounded flex-1">
+                <select id="filter-threat" class="bg-gray-700 text-white px-3 py-2 rounded">
+                    <option value="">All Threats</option>
+                    <option value="CRITICAL">Critical</option>
+                    <option value="SUSPICIOUS">Suspicious</option>
+                    <option value="MONITOR">Monitor</option>
+                    <option value="NORMAL">Normal</option>
+                </select>
+                <select id="filter-action" class="bg-gray-700 text-white px-3 py-2 rounded">
+                    <option value="">All Actions</option>
+                    <option value="ALLOW">Allowed</option>
+                    <option value="BLOCK">Blocked</option>
+                </select>
+                <button id="refresh-btn" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">
+                    Refresh
+                </button>
+            </div>
+        </div>
+
+        <!-- Connections Table -->
+        <div class="bg-gray-800 rounded-lg overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-700">
+                        <tr>
+                            <th class="px-4 py-2 text-left">Time</th>
+                            <th class="px-4 py-2 text-left">Source</th>
+                            <th class="px-4 py-2 text-left">Destination</th>
+                            <th class="px-4 py-2 text-left">Port</th>
+                            <th class="px-4 py-2 text-left">ML Score</th>
+                            <th class="px-4 py-2 text-left">Threat</th>
+                            <th class="px-4 py-2 text-left">Action</th>
+                            <th class="px-4 py-2 text-left">Feedback</th>
+                        </tr>
+                    </thead>
+                    <tbody id="connections-table">
+                        <!-- Filled by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Connection Detail Modal -->
+    <div id="detail-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+        <div class="bg-gray-800 rounded-lg max-w-2xl w-full mx-4 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Connection Details</h2>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-white">✕</button>
+            </div>
+            <div id="modal-content">
+                <!-- Filled by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
