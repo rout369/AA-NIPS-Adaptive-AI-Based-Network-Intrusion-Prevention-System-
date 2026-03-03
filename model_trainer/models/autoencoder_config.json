@@ -1,0 +1,44 @@
+{
+  "architecture": {
+    "layer1_size": 32,
+    "layer2_size": 16,
+    "bottleneck_size": 8,
+    "num_layers": 3,
+    "use_conv": true,
+    "use_attention": true
+  },
+  "regularization": {
+    "l2_lambda": 0.001,
+    "dropout_rate": 0.2,
+    "use_batchnorm": true
+  },
+  "threshold": {
+    "sigma_multiplier": 3.0,
+    "percentile": 95,
+    "use_dynamic": true
+  },
+  "convolutional": {
+    "filters": 32,
+    "kernel_size": 3,
+    "pool_size": 2
+  },
+  "attention": {
+    "heads": 4,
+    "key_dim": 16,
+    "use_self_attention": true
+  },
+  "training": {
+    "learning_rate": 0.001,
+    "batch_size": 256,
+    "epochs": 30,
+    "validation_split": 0.2,
+    "early_stop_patience": 5,
+    "reduce_lr_patience": 3
+  },
+  "data": {
+    "dataset_path": "../dataset/Monday-WorkingHours_trimmed2.csv",
+    "max_samples": 100000,
+    "test_size": 0.2,
+    "random_state": 42
+  }
+}

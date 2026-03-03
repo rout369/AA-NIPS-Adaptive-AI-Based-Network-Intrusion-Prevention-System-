@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎛️ Autoencoder Hyperparameter Tuner</title>
+    <link rel="stylesheet" href="/static/tuner.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🎛️ Autoencoder Hyperparameter Tuner</h1>
+        
+        <div class="tuner-grid">
+            <!-- Left Column - Architecture Settings -->
+            <div class="tuner-column">
+                <div class="card">
+                    <h2>🏗️ Deeper Architecture</h2>
+                    
+                    <div class="slider-group">
+                        <label>Layer 1 Size <span class="value" id="layer1-value">32</span></label>
+                        <input type="range" id="layer1" min="8" max="256" value="32" step="8">
+                        <div class="range-labels">
+                            <span class="good">8-64 🟢</span>
+                            <span class="warn">64-128 🟡</span>
+                            <span class="bad">128-256 🔴</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Layer 2 Size <span class="value" id="layer2-value">16</span></label>
+                        <input type="range" id="layer2" min="4" max="128" value="16" step="4">
+                        <div class="range-labels">
+                            <span class="good">4-32 🟢</span>
+                            <span class="warn">32-64 🟡</span>
+                            <span class="bad">64-128 🔴</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Bottleneck Size <span class="value" id="bottleneck-value">8</span></label>
+                        <input type="range" id="bottleneck" min="2" max="64" value="8" step="2">
+                        <div class="range-labels">
+                            <span class="good">2-8 🟢</span>
+                            <span class="warn">8-16 🟡</span>
+                            <span class="bad">16-64 🔴</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Number of Layers <span class="value" id="layers-value">3</span></label>
+                        <input type="range" id="layers" min="2" max="6" value="3" step="1">
+                        <div class="range-labels">
+                            <span class="good">2-3 🟢</span>
+                            <span class="warn">4 🟡</span>
+                            <span class="bad">5-6 🔴</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🛡️ Regularization</h2>
+                    
+                    <div class="slider-group">
+                        <label>L2 Lambda <span class="value" id="l2-value">0.001</span></label>
+                        <input type="range" id="l2" min="0.0001" max="0.1" value="0.001" step="0.0001">
+                        <div class="range-labels">
+                            <span class="good">0.0001-0.001 🟢</span>
+                            <span class="warn">0.001-0.01 🟡</span>
+                            <span class="bad">0.01-0.1 🔴</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Dropout Rate <span class="value" id="dropout-value">0.2</span></label>
+                        <input type="range" id="dropout" min="0" max="0.5" value="0.2" step="0.05">
+                        <div class="range-labels">
+                            <span class="good">0.1-0.3 🟢</span>
+                            <span class="warn">0.3-0.4 🟡</span>
+                            <span class="bad">0.4-0.5 🔴</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle Column - Threshold & Convolution -->
+            <div class="tuner-column">
+                <div class="card">
+                    <h2>🎯 Dynamic Threshold</h2>
+                    
+                    <div class="slider-group">
+                        <label>Sigma Multiplier <span class="value" id="sigma-value">3.0</span></label>
+                        <input type="range" id="sigma" min="1" max="6" value="3" step="0.5">
+                        <div class="range-labels">
+                            <span class="good">2.5-3.5 🟢</span>
+                            <span class="warn">1.5-2.5 🟡</span>
+                            <span class="bad">1-1.5 or 3.5-6 🔴</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Percentile <span class="value" id="percentile-value">95</span></label>
+                        <input type="range" id="percentile" min="90" max="99" value="95" step="1">
+                        <div class="range-labels">
+                            <span class="good">95-97 🟢</span>
+                            <span class="warn">90-95 🟡</span>
+                            <span class="bad">97-99 🔴</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🔄 Convolutional</h2>
+                    
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" id="conv-enable"> Enable Convolutional Layers
+                        </label>
+                    </div>
+
+                    <div id="conv-settings" style="display: none;">
+                        <div class="slider-group">
+                            <label>Filters <span class="value" id="filters-value">32</span></label>
+                            <input type="range" id="filters" min="16" max="128" value="32" step="8">
+                        </div>
+
+                        <div class="slider-group">
+                            <label>Kernel Size <span class="value" id="kernel-value">3</span></label>
+                            <input type="range" id="kernel" min="2" max="7" value="3" step="1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>👁️ Attention</h2>
+                    
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" id="self-attention"> Enable Self-Attention
+                        </label>
+                    </div>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" id="cross-attention"> Enable Cross-Attention
+                        </label>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Attention Heads <span class="value" id="heads-value">4</span></label>
+                        <input type="range" id="heads" min="2" max="8" value="4" step="1">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Training & Performance -->
+            <div class="tuner-column">
+                <div class="card">
+                    <h2>⚙️ Training Settings</h2>
+                    
+                    <div class="slider-group">
+                        <label>Learning Rate <span class="value" id="lr-value">0.001</span></label>
+                        <input type="range" id="lr" min="0.0001" max="0.1" value="0.001" step="0.0001">
+                        <div class="range-labels">
+                            <span class="good">0.0005-0.005 🟢</span>
+                            <span class="warn">0.005-0.01 🟡</span>
+                            <span class="bad">0.01-0.1 🔴</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Batch Size <span class="value" id="batch-value">256</span></label>
+                        <input type="range" id="batch" min="32" max="1024" value="256" step="32">
+                        <div class="range-labels">
+                            <span class="good">128-256 🟢</span>
+                            <span class="warn">256-512 🟡</span>
+                            <span class="bad">512-1024 🔴</span>
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>Epochs <span class="value" id="epochs-value">20</span></label>
+                        <input type="range" id="epochs" min="5" max="100" value="20" step="5">
+                    </div>
+                </div>
+
+                <div class="card performance-card">
+                    <h2>📊 Current Performance</h2>
+                    
+                    <div class="metric">
+                        <span>Validation Loss:</span>
+                        <span id="val-loss" class="value">0.0243</span>
+                    </div>
+                    <div class="metric">
+                        <span>Detection Rate:</span>
+                        <span id="detection-rate" class="value">92.5%</span>
+                    </div>
+                    <div class="metric">
+                        <span>False Positives:</span>
+                        <span id="false-pos" class="value">2.1%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Training Time:</span>
+                        <span id="train-time" class="value">45.3s</span>
+                    </div>
+
+                    <canvas id="lossChart"></canvas>
+                </div>
+
+                <div class="button-group">
+                    <button id="test-btn" class="btn btn-primary">🔬 Test Configuration</button>
+                    <button id="train-btn" class="btn btn-success">🚀 Start Training</button>
+                    <button id="export-btn" class="btn btn-info">💾 Export Model</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/tuner.js"></script>
+</body>
+</html>
