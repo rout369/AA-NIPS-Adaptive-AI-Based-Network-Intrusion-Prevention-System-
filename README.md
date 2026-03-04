@@ -5,7 +5,10 @@
 [![License: Custom](https://img.shields.io/badge/License-Custom-red.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Go 1.19+](https://img.shields.io/badge/Go-1.19+-00ADD8.svg)](https://golang.org/)
+[![Flask](https://img.shields.io/badge/Flask-2.0+-black.svg)](https://flask.palletsprojects.com/)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.0+-FF6F00.svg)](https://tensorflow.org/)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.0+-orange.svg)](https://scikit-learn.org/)
+[![XGBoost](https://img.shields.io/badge/XGBoost-1.6+-green.svg)](https://xgboost.readthedocs.io/)
 [![Status: Proof of Concept](https://img.shields.io/badge/Status-Proof%20of%20Concept-yellowgreen)]()
 
 ---
@@ -29,17 +32,13 @@
 
 ### **What Is This Project?**
 
-This is a **final year academic project** that demonstrates how **Machine Learning can enhance traditional firewall systems**. It bridges two worlds:
+This is a **final year academic project** that demonstrates how **Machine Learning can enhance traditional firewall systems** with **5-class attack classification** and **zero-day anomaly detection**. It bridges two worlds:
 
 | Traditional Firewall | + | Machine Learning | = | **Adaptive Security** |
 |---------------------|---|---|-----------------|---|
-| Static rules | | Pattern recognition | | Dynamic threat blocking |
-| Manual updates | | Self-learning | | Zero-day detection |
-| Known threats only | | Anomaly detection | | Unknown attack prevention |
-
-### **Project Philosophy**
-
-> *"We're not building a production-grade enterprise firewall. We're proving that ML + Firewall = Smarter Security."*
+| Static rules | | Ensemble of 9+ classifiers | | Dynamic threat blocking |
+| Manual updates | | Self-learning via feedback | | Zero-day detection |
+| Known threats only | | Autoencoder anomaly detection | | Unknown attack prevention |
 
 **This is a PROOF OF CONCEPT, designed to:**
 - ✅ Demonstrate technical competency in both **Network Security** and **Machine Learning**
@@ -47,122 +46,133 @@ This is a **final year academic project** that demonstrates how **Machine Learni
 - ✅ Provide **visual, interactive demonstrations** for academic presentations
 - ✅ Create a **foundation** that future students can build upon
 
-**What This Project IS:**
-- 🔬 A research prototype
-- 🎓 A learning tool
-- 💡 A proof of concept
-- 📊 A demonstration platform
-
-**What This Project IS NOT:**
-- ❌ A replacement for enterprise firewalls (Cisco, Palo Alto, etc.)
-- ❌ A production-ready security solution
-- ❌ A commercial product
-- ❌ A fully-featured IDS/IPS
-
 ---
 
 ## ✨ **CORE FEATURES**
 
-### 🔥 **Bidirectional ML-Firewall Integration** ⭐ *KEY NOVELTY*
+### 🧠 **5-Class Machine Learning Detection** ⭐ *PRIMARY NOVELTY*
+
+| Attack Class | Description | Examples |
+|--------------|-------------|----------|
+| **Normal** | Benign traffic | Web browsing, email, file transfer |
+| **DoS** | Denial of Service | SYN flood, UDP flood, ICMP flood |
+| **Probe** | Network scanning | Port scans, OS fingerprinting, vulnerability probing |
+| **R2L** | Remote to Local | SSH brute force, FTP password guessing |
+| **U2R** | User to Root | Buffer overflow, privilege escalation |
+
+### 🔥 **Ensemble Model Architecture**
+- **9 base models**: Random Forest, Decision Tree, Logistic Regression, Linear SVM, KNN, Naive Bayes, Neural Network (MLP), Gradient Boosting, XGBoost (plus optional LightGBM/CatBoost if installed)
+- **Weighted voting** based on validation accuracy
+- **Consensus scoring** to indicate model agreement
+- **Per-class probabilities** for explainability
+
+### 🚨 **Zero-Day Attack Detection**
+- **Autoencoder** trained on normal traffic only (9 features from CIC-IDS-2017)
+- Reconstruction error threshold flags anomalies (final threshold: **0.2960**)
+- Separate "suspicious" and "critical" anomaly levels (strict threshold: **2.0398**)
+- Detects never-before-seen attack patterns
+
+### 🔄 **Bidirectional ML-Firewall Integration**
 
 | Feature | Description | Status |
 |--------|-------------|--------|
-| **ML → Firewall** | Detected threats automatically become temporary block rules | ✅ **Implemented** |
-| **Firewall → ML** | False positives can be reported back (manual) | ✅ **Implemented** |
-| **Confidence Scoring** | 50-100% confidence affects blocking decision | ✅ **Implemented** |
-| **Rule Expiration** | ML rules auto-expire after 24 hours | ✅ **Implemented** |
-| **Shadow Mode** | Test ML decisions without blocking | ✅ **Implemented** |
+| **ML → Firewall** | Detected threats (with confidence) can auto-create temporary block rules | ✅ **Implemented** |
+| **Firewall → ML** | False positive/missed attack feedback sent to ML service | ✅ **Implemented** |
+| **Retraining** | After 4500 feedback samples, models can be retrained | ✅ **Implemented** |
+| **Confidence Thresholds** | Per-attack-type thresholds for blocking decisions | ✅ **Implemented** |
+| **Rule Expiry** | ML-generated rules auto-expire (24h default) | ✅ **Implemented** |
 
-### 🛡️ **Go Firewall Engine**
-
-| Feature | Description | Status |
-|--------|-------------|--------|
-| **Priority-Based Rules** | Higher number = higher priority (1-100) | ✅ **Implemented** |
-| **CIDR Support** | Block entire subnets (192.168.1.0/24) | ✅ **Implemented** |
-| **Wildcard Matching** | Pattern matching (192.168.1.*) | ✅ **Implemented** |
-| **Protocol Filtering** | TCP, UDP, ICMP, any | ✅ **Implemented** |
-| **Port-Based Rules** | Block specific ports (22, 443, 0=any) | ✅ **Implemented** |
-| **Rule Lifecycle** | Add, remove, enable, disable | ✅ **Implemented** |
-| **Concurrent Safety** | Thread-safe with mutex locks | ✅ **Implemented** |
+### 📊 **Comprehensive Logging & Dashboard**
+- Structured JSON logs with attack type, confidence, action
+- **Go-based web dashboard** for real-time visualization
+- Filter connections by IP, threat level, attack type
+- Provide feedback directly from dashboard
+- Export history as JSON
 
 ### ⚡ **DDoS Protection Module**
+- Per-IP rate tracking (1-minute sliding windows)
+- Auto-block at 30+ connections/min for 2 minutes
+- Warning at 15 connections/min
+- Active attack display with remaining block time
 
-| Feature | Description | Status |
-|--------|-------------|--------|
-| **Per-IP Rate Tracking** | 1-minute sliding windows | ✅ **Implemented** |
-| **Auto-Blocking** | 30+ connections/min → 2-minute block | ✅ **Implemented** |
-| **Early Warning** | Visual alert at 15 connections/min | ✅ **Implemented** |
-| **Active Attack Display** | `attacks` command shows blocked IPs | ✅ **Implemented** |
-| **Rate Reset** | `clear-rates` command | ✅ **Implemented** |
-
-### 📊 **Logging & Observability**
-
-| Feature | Description | Status |
-|--------|-------------|--------|
-| **Structured Logs** | JSON-formatted log entries | ✅ **Implemented** |
-| **In-Memory Storage** | Last 1000 logs kept in RAM | ✅ **Implemented** |
-| **IP Search** | `logs-search <ip>` finds all activity | ✅ **Implemented** |
-| **Log Statistics** | Allow/block ratios, total counts | ✅ **Implemented** |
-| **Emoji CLI** | Colorful, intuitive command interface | ✅ **Implemented** |
-
-### 📈 **ML Visualization Suite**
-
-| Feature | Description | Status |
-|--------|-------------|--------|
-| **Confusion Matrix** | Visualize true/false positives/negatives | ✅ **Implemented** |
-| **ROC Curves** | Model performance visualization | ✅ **Implemented** |
-| **AUC Scores** | Quantitative model comparison | ✅ **Implemented** |
-| **Threat Distribution** | Pie charts of malicious vs normal | ✅ **Implemented** |
-| **HTML Reports** | Self-contained analysis reports | ✅ **Implemented** |
+### 🎛️ **Hyperparameter Tuner (Autoencoder)**
+- Web interface to tune autoencoder architecture (layer sizes, regularization, etc.)
+- Live training loss updates via WebSocket
+- Export tuned model for deployment
 
 ---
 
 ## 🧠 **ML PIPELINE CAPABILITIES**
 
-### **Multi-Model Ensemble**
+### **Multi-Model Ensemble Performance**
 
-We trained and compared **6 different ML classifiers**:
+Trained on balanced NSL-KDD dataset (102,538 training samples, 40 features). Validation on 25,195 samples gave the following results:
 
-| Model | Accuracy | Precision | Recall | F1-Score | Inference Time |
-|-------|----------|-----------|--------|----------|----------------|
-| **Random Forest** | **94.7%** | **0.95** | **0.93** | **0.94** | 45ms |
-| **Gradient Boosting** | 93.2% | 0.94 | 0.92 | 0.93 | 62ms |
-| **SVM (RBF)** | 91.8% | 0.92 | 0.90 | 0.91 | 78ms |
-| **Logistic Regression** | 89.5% | 0.90 | 0.88 | 0.89 | **12ms** |
-| **Decision Tree** | 87.3% | 0.88 | 0.86 | 0.87 | 18ms |
-| **K-Nearest Neighbors** | 86.1% | 0.87 | 0.85 | 0.86 | 34ms |
+| Model | Accuracy | F1 Macro | F1 (DoS) | F1 (Normal) | F1 (Probe) | F1 (R2L) | F1 (U2R) | Training Time |
+|-------|----------|----------|----------|-------------|------------|----------|----------|---------------|
+| **XGBoost** | **0.9968** | **0.9684** | 0.9993 | 0.9970 | 0.9890 | 0.9567 | **0.9000** | 1.2s |
+| Random Forest | 0.9985 | 0.9566 | 0.9998 | 0.9986 | 0.9961 | 0.9701 | 0.8182 | 1.1s |
+| Gradient Boosting | 0.9976 | 0.9496 | 0.9997 | 0.9978 | 0.9909 | 0.9770 | 0.7826 | 71.8s |
+| Neural Network (MLP) | 0.9969 | 0.9214 | 0.9995 | 0.9972 | 0.9908 | 0.9529 | 0.6667 | 33.5s |
+| KNN | 0.9964 | 0.9210 | 0.9989 | 0.9968 | 0.9903 | 0.9526 | 0.6667 | 0.02s |
+| Decision Tree | 0.9921 | 0.8043 | 0.9995 | 0.9926 | 0.9897 | 0.8024 | 0.2373 | 0.9s |
+| Linear SVM | 0.9472 | 0.6889 | 0.9890 | 0.9523 | 0.8356 | 0.5747 | 0.0930 | 49.6s |
+| Logistic Regression | 0.9284 | 0.6479 | 0.9909 | 0.9322 | 0.8504 | 0.4277 | 0.0382 | 36.3s |
+| Naive Bayes | 0.4982 | 0.3517 | 0.6888 | 0.1805 | 0.6632 | 0.2188 | 0.0075 | 0.1s |
 
-**🏆 BEST MODEL: Random Forest** - Selected as default for its balance of speed and accuracy
+**🏆 BEST MODEL: XGBoost** – selected automatically based on validation F1 macro score (**0.9684**).
 
-### **Features Extracted from PCAPs**
+### **Zero-Day Autoencoder Performance**
 
-| Category | Features |
-|---------|----------|
-| **IP Layer** | Source IP, Destination IP, Protocol, TTL, Packet Length |
-| **Transport Layer** | Source Port, Destination Port, TCP Flags (SYN, FIN, RST) |
-| **Flow Statistics** | Packet Count, Total Bytes, Flow Duration |
-| **Statistical** | Mean Packet Size, Std Dev, Min/Max Size |
-| **Derived** | Well-known Port Flag, Window Size |
+- **Architecture**: 9 input features, convolutional layers + dense layers, bottleneck size 8, attention mechanism
+- **Dataset**: 99,906 samples of normal traffic from CIC-IDS-2017 (9 selected features)
+- **Reconstruction error (validation)**: Mean = 0.1262, Std = 1.4504
+- **Detection threshold** (95th percentile): **0.2960**
+- **Strict threshold** (99th percentile): **2.0398**
+- **Best validation loss**: 0.2081
 
-### **Attack Types Detected**
+### **Features Extracted from Live Traffic**
 
-| Attack Category | Specific Types | Confidence |
-|----------------|----------------|------------|
-| **Port Scanning** | SYN scan, FIN scan, NULL scan, XMAS scan | 92-98% |
-| **DDoS Attacks** | SYN flood, UDP flood, ICMP flood | 88-95% |
-| **Brute Force** | SSH brute force, FTP brute force | 85-92% |
-| **Reconnaissance** | OS fingerprinting, Service discovery | 78-86% |
-| **Data Exfiltration** | Large outbound transfers | 75-82% |
+**41 NSL-KDD features (for 5‑class classification):**
+- **Basic**: duration, protocol_type, service, flag, src_bytes, dst_bytes, land, wrong_fragment, urgent
+- **Content**: hot, num_failed_logins, logged_in, num_compromised, root_shell, su_attempted, num_root, num_file_creations, num_shells, num_access_files, num_outbound_cmds, is_host_login, is_guest_login
+- **Traffic (time-based)**: count, srv_count, serror_rate, srv_serror_rate, rerror_rate, srv_rerror_rate, same_srv_rate, diff_srv_rate, srv_diff_host_rate
+- **Host-based**: dst_host_count, dst_host_srv_count, dst_host_same_srv_rate, dst_host_diff_srv_rate, dst_host_same_src_port_rate, dst_host_srv_diff_host_rate, dst_host_serror_rate, dst_host_srv_serror_rate, dst_host_rerror_rate, dst_host_srv_rerror_rate
+
+**9 autoencoder features (for zero‑day detection):**
+- Destination_Port, Flow_Duration, Total_Fwd_Packets, Total_Backward_Packets, Fwd_Packet_Length_Mean, Flow_Bytes/s, Flow_Packets/s, Init_Win_bytes_forward, Init_Win_bytes_backward
+
+### **Test Set Evaluation (KDDTest+ with Novel Attacks)**
+
+When evaluated on the full KDDTest+ dataset (22,544 samples, including 17 novel attack types not seen in training), the best model (XGBoost) achieved:
+
+| Metric | Value |
+|--------|-------|
+| Accuracy | 0.7405 |
+| F1 Macro | 0.5226 |
+| F1 (DoS) | 0.8503 |
+| F1 (Normal) | 0.7754 |
+| F1 (Probe) | 0.7049 |
+| F1 (R2L) | 0.0090 |
+| F1 (U2R) | 0.2737 |
+
+*Note: The drop in R2L and U2R performance is expected due to the extremely low representation of these classes in training and the novelty of many attacks in the test set. This highlights the challenge of detecting rare and novel attack types – exactly why we include a separate zero‑day autoencoder.*
+
+### **Feedback & Retraining**
+- Feedback stored in `feedback/feedback_with_features.jsonl`
+- Minimum **4500 samples** required for retraining
+- Retraining combines original data + feedback, retrains all models, updates weights
+- API endpoints to check status and trigger retraining
 
 ---
 
 ## 🔥 **FIREWALL CAPABILITIES**
 
-### **Rule System**
+### **Rule System (Enhanced)**
 
 **Rule Structure:**
 ```
-ID: rule-1647358921-42
+ID: rule-1647358921-42  or  ml-1234567890-5
 Type: block | allow
 Source: 192.168.1.0/24 | 10.0.0.* | any
 Destination: 8.8.8.8 | any
@@ -170,19 +180,29 @@ Port: 22 | 443 | 0 (any)
 Protocol: tcp | udp | icmp | any
 Priority: 1-100 (higher = more important)
 Enabled: true | false
-Description: "Block malicious subnet"
+Description: "Block malicious IP"
+MLGenerated: true/false
+AttackType: "DoS" | "Probe" | etc. (if ML)
+ExpiresAt: timestamp (for ML rules)
 ```
 
 **Priority Levels:**
 ```
-Priority 100: 🔴 CRITICAL - Active attacks, emergency blocks
-Priority 80:  🟠 HIGH - ML-generated threats
+Priority 100: 🔴 CRITICAL - Active attacks (U2R, high‑confidence DoS)
+Priority 80:  🟠 HIGH - ML‑generated threats
 Priority 50:  🟡 MEDIUM - Suspicious subnets
 Priority 20:  🟢 LOW - Default allow rules
 Priority 1:   ⚪ INFO - Logging only
 ```
 
-### **CLI Commands**
+### **ML Integration in Firewall**
+- On each packet, the firewall extracts 41 features and calls the ML service's `/multiclass_score` endpoint.
+- Receives per‑class probabilities, predicted class, confidence, consensus.
+- Anomaly score optionally obtained from `/anomaly_score`.
+- Based on attack type and confidence, firewall decides to block, alert, or allow.
+- If confidence is high enough, an ML‑generated temporary rule is auto‑created.
+
+### **CLI Commands (Updated)**
 
 | Command | Description | Example |
 |--------|-------------|---------|
@@ -194,18 +214,31 @@ Priority 1:   ⚪ INFO - Logging only
 | `enable`/`disable` | Toggle rules | `enable rule-12345` |
 | `test` | Test a connection | `test 1.2.3.4 8.8.8.8 80 tcp` |
 | `stats` | Show firewall statistics | `stats` |
+| `attack-stats` | Show attack type breakdown | `attack-stats` |
 | `ddos-stats` | Show DDoS protection stats | `ddos-stats` |
 | `attacks` | Show active DDoS attacks | `attacks` |
 | `logs` | View recent logs | `logs 50` |
 | `logs-search` | Search logs by IP | `logs-search 192.168.1.100` |
 | `monitor` | Show monitoring status | `monitor` |
+| `ml-status` | Show ML service status and model info | `ml-status` |
+| `analyze` | Analyze PCAP file with ML | `analyze suspicious.pcap 0.7` |
+| `feedback-stats` | Show feedback statistics | `feedback-stats` |
+| `retrain` | Trigger model retraining | `retrain` |
+| `history` | Launch web dashboard | `history` |
 | `exit` | Quit firewall | `exit` |
+
+### **Web Dashboard (Go)**
+- Accessible at `http://localhost:8081`
+- Real‑time connection history with filtering by IP, threat level, attack type
+- Detailed per‑connection ML scores and model contributions
+- Inline feedback submission
+- Export data as JSON
 
 ---
 
 ## ⚠️ **CURRENT LIMITATIONS & FUTURE SCOPE**
 
-*This section outlines the intentional scope boundaries for this academic project.*
+*This section outlines intentional scope boundaries for this academic project.*
 
 ### 🔴 **1. DETECTION MODE ONLY (By Design)**
 
@@ -214,7 +247,7 @@ Priority 1:   ⚪ INFO - Logging only
 │                      CURRENT BEHAVIOR                           │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│   🔍 ML DETECTS THREAT → 🔴 SHOWS "WOULD BLOCK" MESSAGE        │
+│   🔍 ML DETECTS THREAT → 🔴 SHOWS "BLOCK" DECISION              │
 │         ↓                                                       │
 │   📝 PACKET PASSES THROUGH → 📋 LOGGED FOR ANALYSIS            │
 │         ↓                                                       │
@@ -224,18 +257,13 @@ Priority 1:   ⚪ INFO - Logging only
 ```
 
 **🎓 WHY THIS IS OKAY FOR OUR PROJECT:**
-- ✅ **Safe for lab environment** - No risk of disrupting university network
-- ✅ **Still proves the concept** - Detection is the hard part, enforcement is trivial
-- ✅ **Better for demos** - You SEE the red "BLOCKED" message without actually breaking connections
-- ✅ **Academic integrity** - Demonstrates understanding without causing harm
+- ✅ **Safe for lab environment** – No risk of disrupting university network
+- ✅ **Still proves the concept** – Detection is the hard part; enforcement is trivial
+- ✅ **Better for demos** – You SEE the red "BLOCKED" message without actually breaking connections
+- ✅ **Academic integrity** – Demonstrates understanding without causing harm
 
-**🔧 EASY FUTURE ENHANCEMENT (1-2 days):**
-```go
-// Add --enforce flag that calls OS firewall
-if enforceMode {
-    exec.Command("iptables", "-A", "INPUT", "-s", ip, "-j", "DROP").Run()
-}
-```
+**🔧 EASY FUTURE ENHANCEMENT:**
+- Add `--enforce` flag that calls OS firewall (iptables, pf, Windows Firewall)
 
 ---
 
@@ -248,27 +276,20 @@ if enforceMode {
 │                                                                 │
 │   💾 RULES STORED IN RAM ONLY                                   │
 │   💀 CLOSE PROGRAM → LOSE ALL RULES                             │
-│   📊 LOGS: LAST 1000 ENTRIES IN MEMORY                          │
+│   📊 LOGS: LAST 10000 CONNECTIONS IN MEMORY                     │
+│   📋 FEEDBACK: PERSISTED TO JSONL FILES                         │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**🎓 WHY THIS IS OKAY FOR OUR PROJECT:**
-- ✅ **Simpler code** - Students can understand it in one sitting
-- ✅ **Fresh start every time** - Perfect for repeated demonstrations
-- ✅ **No dependencies** - Works immediately after git clone
-- ✅ **Lower resource usage** - Runs on any laptop
+**🎓 WHY THIS IS OKAY:**
+- ✅ **Simpler code** – Students can understand it quickly
+- ✅ **Fresh start each run** – Perfect for repeated demonstrations
+- ✅ **No database dependency** – Works immediately after git clone
+- ✅ **Feedback still persists** – Important for retraining demonstration
 
-**🔧 EASY FUTURE ENHANCEMENT (2-3 hours):**
-```python
-# Save rules to JSON on exit
-with open("firewall_rules.json", "w") as f:
-    json.dump(rules, f)
-
-# Load rules on startup
-if os.path.exists("firewall_rules.json"):
-    rules = json.load(open("firewall_rules.json"))
-```
+**🔧 EASY FUTURE ENHANCEMENT:**
+- Save rules to JSON on exit and load on startup
 
 ---
 
@@ -286,22 +307,18 @@ if os.path.exists("firewall_rules.json"):
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**🎓 WHY THIS IS OKAY FOR OUR PROJECT:**
-- ✅ **Zero infrastructure** - No servers, no cloud, no networking headaches
-- ✅ **Works offline** - Present anywhere, anytime
-- ✅ **Easy debugging** - Everything in one place
-- ✅ **Cost free** - No AWS/Azure credits needed
+**🎓 WHY THIS IS OKAY:**
+- ✅ **Zero infrastructure** – No servers, no cloud, no networking headaches
+- ✅ **Works offline** – Present anywhere, anytime
+- ✅ **Easy debugging** – Everything in one place
+- ✅ **Cost free** – No AWS/Azure credits needed
 
-**🔧 EASY FUTURE ENHANCEMENT (1 day):**
-```dockerfile
-# Package as Docker containers
-docker-compose up -d
-# Now ML and Firewall can be on different machines
-```
+**🔧 EASY FUTURE ENHANCEMENT:**
+- Package as Docker containers for distributed deployment
 
 ---
 
-### 🔴 **4. TRAINED ON SYNTHETIC + PUBLIC DATASETS**
+### 🔴 **4. TRAINED ON PUBLIC DATASETS**
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -309,8 +326,8 @@ docker-compose up -d
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │   📚 TRAINING DATA:                                            │
-│   • Self-generated PCAPs (port scans, DDoS sims)                │
-│   • Public datasets (CIC-IDS-2017 subset)                       │
+│   • NSL-KDD (balanced, 5‑class)                                 │
+│   • CIC-IDS-2017 (for autoencoder)                              │
 │                                                                 │
 │   ✅ PREDICTABLE, REPRODUCIBLE RESULTS                         │
 │   ❌ MAY NOT GENERALIZE TO ALL REAL TRAFFIC                    │
@@ -318,15 +335,15 @@ docker-compose up -d
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**🎓 WHY THIS IS OKAY FOR OUR PROJECT:**
-- ✅ **Controlled experiments** - Know exactly what the model should detect
-- ✅ **No privacy concerns** - No real user data involved
-- ✅ **Quick training** - Minutes instead of days
-- ✅ **Academic honesty** - Clear provenance of training data
+**🎓 WHY THIS IS OKAY:**
+- ✅ **Controlled experiments** – Know exactly what the model should detect
+- ✅ **No privacy concerns** – No real user data involved
+- ✅ **Quick training** – Minutes instead of days
+- ✅ **Academic honesty** – Clear provenance of training data
 
-**🔧 EASY FUTURE ENHANCEMENT (Optional):**
-- Collect opt-in traffic from classmates (with ethics approval)
-- Use more comprehensive public datasets (CSE-CIC-IDS-2018)
+**🔧 EASY FUTURE ENHANCEMENT:**
+- Collect opt‑in traffic with ethics approval
+- Use more recent datasets (CSE‑CIC‑IDS‑2018, UNSW‑NB15)
 
 ---
 
@@ -345,107 +362,79 @@ docker-compose up -d
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-**🎓 WHY THIS IS OKAY FOR OUR PROJECT:**
+**🎓 WHY THIS IS OKAY:**
 - ✅ **IPv4 is sufficient** for demonstrating ALL core concepts
-- ✅ **Simpler code** - No dual-stack complexity
-- ✅ **Wider compatibility** - Works in more lab environments
-- ✅ **IPv6 support is trivial to add** but not necessary for scope
+- ✅ **Simpler code** – No dual‑stack complexity
+- ✅ **Wider compatibility** – Works in more lab environments
 
-**🔧 EASY FUTURE ENHANCEMENT (2-3 hours):**
-```go
-// Add IPv6 parsing alongside IPv4
-case *layers.IPv6:
-    srcIP = ipLayer.SrcIP
-    dstIP = ipLayer.DstIP
-    // Same logic, different layer type
-```
-
----
-
-## ✅ **WHAT WE ACCOMPLISHED**
-
-### **Within Project Scope:**
-| Area | Achievement |
-|------|-------------|
-| **ML Integration** | Successfully connected Python ML → Go firewall |
-| **Multi-Model Training** | Trained and compared 6 classifiers |
-| **Feature Extraction** | 20+ network features from raw PCAPs |
-| **Real-Time Detection** | Live packet monitoring with firewall decisions |
-| **DDoS Protection** | Working rate limiting with auto-block |
-| **CLI Interface** | Full-featured command system with 15+ commands |
-| **Visualization** | ROC curves, confusion matrices, HTML reports |
-| **Documentation** | Complete README, architecture guide, demo scenarios |
-
-### **Beyond Project Scope (Future Work):**
-| Area | Why It's Future Work |
-|------|---------------------|
-| **Packet Enforcement** | Intentionally disabled for safety |
-| **Database Persistence** | Not needed for demonstration |
-| **Distributed Deployment** | Adds complexity without educational value |
-| **Production Training** | Requires ethics approval and real traffic |
-| **IPv6 Support** | Trivial to add but not required for concept |
+**🔧 EASY FUTURE ENHANCEMENT:**
+- Add IPv6 parsing in packet monitor
 
 ---
 
 ## 🎓 **DEMONSTRATION SCENARIOS**
 
-### **Scenario 1: Port Scan Detection**
+### **Scenario 1: 5-Class Detection of Port Scan**
 ```
-1. 👨‍🏫 Start: "./firewall --mode=realtime"
-2. 🖥️ Another terminal: "nmap -sS localhost"
-3. 🔴 Firewall output:
-   🔴 FIREWALL BLOCK: 127.0.0.1:54321 → 127.0.0.1:22 tcp (Would be blocked)
-   🔴 FIREWALL BLOCK: 127.0.0.1:54322 → 127.0.0.1:80 tcp (Would be blocked)
-4. 📋 Check logs: "logs-search 127.0.0.1"
-5. 🎯 Result: "System correctly identified port scanning activity!"
-```
-
-### **Scenario 2: DDoS Attack Simulation**
-```
-1. 👨‍🏫 Start: "./firewall"
-2. 🖥️ Run attack script: "python simulate_ddos.py --target 192.168.1.100"
-3. ⚠️ Warning appears at 15 connections:
-   "⚠️ DDoS WARNING: IP 10.0.0.5 is making suspicious connections (15/min)"
-4. 🔴 Auto-block triggers at 30 connections:
-   "🔴 DDoS ATTACK MITIGATED: Blocked IP 10.0.0.5 for 2m0s"
-5. 📊 Show stats: "ddos-stats"
-6. 🎯 Result: "DDoS protection works automatically!"
+1. 👨‍🏫 Start ML service:   python ml_service.py
+2. 👨‍🏫 Start firewall:      ./firewall --ml
+3. 🖥️ In another terminal:  nmap -sS localhost
+4. 🔴 Firewall output:
+   🟠 Probe attack detected! (confidence 94%)
+   🔴 FIREWALL BLOCK: 127.0.0.1:54321 → 127.0.0.1:22 tcp (Probe)
+5. 📋 Check logs: logs-search 127.0.0.1
+6. 🎯 Result: "System correctly identified probe/scan activity!"
 ```
 
-### **Scenario 3: ML-PCAP Analysis + Auto-Blocking**
+### **Scenario 2: Zero-Day Anomaly Detection**
 ```
-1. 👨‍🏫 Start ML service: "python model_trainer.py --serve"
-2. 📁 Analyze PCAP: "python threat_detector.py --pcap suspicious.pcap"
-3. 🤖 ML Output:
-   "Detected 12 malicious IPs with 94% confidence"
-   "Sending block rules to firewall..."
-4. 🖥️ Check firewall: "rules"
-   "rule-12345 | block | 5.5.5.5 | any | tcp 22 | ML-GENERATED"
-5. 🎯 Result: "ML automatically created firewall rules!"
+1. 👨‍🏫 Start ML service (autoencoder loaded)
+2. 👨‍🏫 Start firewall with --ml
+3. 🖥️ Run a custom exploit script (not in training data)
+4. 🔴 Firewall shows:
+   ═════ ZERO-DAY ANOMALY DETECTION ═════
+   Reconstruction Error: 0.5234 🔴
+   Status: critical
+   🚨 ZERO-DAY CANDIDATE!
+   Highly anomalous - Unknown attack pattern
+5. 🎯 Result: "System flagged a never‑before‑seen attack pattern!"
+```
+
+### **Scenario 3: Feedback Loop & Retraining**
+```
+1. 👨‍🏫 While monitoring, a false positive occurs (ML flagged normal as DoS).
+2. 👨‍🏫 In dashboard or CLI: feedback-stats shows 1 false positive.
+3. 🖥️ Provide feedback via CLI or dashboard.
+4. 📊 After collecting 4500 samples, check retrain status.
+5. 🔄 Trigger retrain: retrain
+   ✅ Retraining complete! New accuracy: 97.5% (was 96.8%)
+6. 🎯 Result: "The system improved itself using human feedback!"
 ```
 
 ---
 
 ## 🛠️ **TECHNOLOGY STACK**
 
-### **Machine Learning Pipeline (Python)**
+### **Machine Learning Service (Python)**
 | Component | Library | Purpose |
 |-----------|---------|---------|
-| **Data Processing** | pandas, numpy | Feature extraction, manipulation |
-| **ML Models** | scikit-learn | 6 classifier implementations |
-| **Packet Capture** | scapy | PCAP reading, packet parsing |
-| **Visualization** | matplotlib, seaborn | Charts, graphs, matrices |
-| **Interactive Charts** | plotly | HTML reports, interactive ROC |
-| **Web Framework** | Flask/FastAPI (optional) | ML-as-a-service API |
+| **Web Framework** | Flask | REST API for ML inference |
+| **ML Models** | scikit-learn, XGBoost | 5‑class classifiers (9 models) |
+| **Deep Learning** | TensorFlow/Keras | Autoencoder for zero‑day |
+| **Data Processing** | pandas, numpy, joblib | Feature extraction, serialization |
+| **Packet Parsing** | scapy | PCAP analysis |
+| **Visualization** | matplotlib, seaborn, shap | Training plots, feature importance |
+| **Hyperparameter Tuning** | Flask + WebSockets | Tuner web app |
 
 ### **Firewall Engine (Go)**
 | Component | Library | Purpose |
 |-----------|---------|---------|
 | **Packet Capture** | gopacket/pcap | Live traffic monitoring |
+| **HTTP Client** | net/http | Communicate with ML service |
 | **Concurrency** | goroutines, sync | Parallel packet processing |
-| **CLI Interface** | bufio, os/exec | Command handling |
-| **Networking** | net | IP parsing, CIDR validation |
-| **JSON Handling** | encoding/json | Log formatting |
+| **CLI Interface** | bufio, flag | Command handling |
+| **Web Dashboard** | net/http, html/template, embed | Built‑in UI |
+| **JSON Handling** | encoding/json | Log formatting, API data |
 
 ---
 
@@ -455,85 +444,108 @@ case *layers.IPv6:
 - Python 3.9+
 - Go 1.19+
 - libpcap / WinPcap / Npcap
-- 4GB RAM (minimum)
-- 500MB disk space
+- 8GB RAM (recommended for training)
+- 2GB disk space
 
-### **5-Minute Quick Start**
+### **Quick Start (5 minutes)**
 
 ```bash
 # 1. Clone repository
 git clone https://github.com/rout369/AA-NIPS-Adaptive-AI-Based-Network-Intrusion-Prevention-System-
+cd AA-NIPS-Adaptive-AI-Based-Network-Intrusion-Prevention-System-
 
-# 2. Setup ML environment
-cd ml_pipeline
+# 2. Setup Python environment
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
 
-# 3. Train models (or download pre-trained)
-python model_trainer.py --quick-train
+# 3. (Optional) Train models – already provided in models/ folder
+#    To retrain from scratch:
+#    cd model_trainer
+#    python supervised_model_trainer.py   # trains 9 models (~2-3 min)
+#    python unsupervised_model_trainer.py # trains autoencoder (~2 min)
 
-# 4. Build Go firewall
+# 4. Start ML service
+cd ml_pipeline
+python ml_service.py
+
+# In a new terminal:
+
+# 5. Build and run Go firewall
 cd ../go_firewall
 go mod download
 go build -o firewall.exe
+./firewall.exe --ml
 
-# 5. Run integrated system
-./firewall.exe --demo-mode
+# 6. In a third terminal, generate test traffic (optional)
+python examples/attack_simulator.py --type port_scan
 
-# THAT'S IT! The firewall is now running with ML capabilities.
+# 7. Open dashboard (after stopping monitoring with Ctrl+C)
+firewall> history
 ```
 
 ### **Verify Installation**
 ```bash
+firewall> ml-status
+✅ Service: Connected
+   Models loaded: 9
+   🏆 Best model: XGBoost (F1 Score: 96.8%)
+   Features: 41
+   Auto-block threshold: 80%
+
 firewall> test 1.2.3.4 8.8.8.8 80 tcp
 ✅ ALLOWED: 1.2.3.4 -> 8.8.8.8:80 tcp (Default allow)
 
 firewall> stats
 📊 Firewall Statistics
 Total Rules: 5
-Blocked IPs: 3
+ML Rules: 0
 DDoS Blocks: 0
-
-firewall> exit
+ML Blocks: 0
 ```
 
 ---
 
-## 📂 **PROJECT STRUCTURE -- (Future Work)**
+## 📂 **PROJECT STRUCTURE**
 
 ```
 ml-adaptive-firewall/
 │
-├── 📁 ml_pipeline/                 # Python ML Components
-│   ├── model_trainer.py          # Train 6 ML models
-│   ├── threat_detector.py        # PCAP analysis + scoring
-│   ├── feature_extractor.py      # 20+ network features
-│   ├── visualize.py              # ROC, confusion matrix
-│   ├── requirements.txt          # Python dependencies
-│   └── 📁 models/               # Pre-trained model files
+├── 📁 ml_pipeline/                 # Python ML Service
+│   ├── ml_service.py              # Flask REST API
+│   ├── supervised_model_trainer.py # Train 5‑class models
+│   ├── unsupervised_model_trainer.py # Train autoencoder
+│   ├── retrain.py                  # Retrain with feedback
+│   ├── tuner_app.py                # Autoencoder hyperparameter tuner
+│   ├── 📁 models/                   # Saved models, scalers, weights
+│   ├── 📁 feedback/                  # JSONL feedback files
+│   └── requirements.txt
 │
-├── 📁 go_firewall/               # Go Firewall Engine
-│   ├── main.go                  # CLI entry point
-│   ├── firewall.go              # Core firewall logic
-│   ├── rules.go                 # Rule management
-│   ├── ddos.go                  # Rate limiting
-│   ├── logging.go               # Structured logs
-│   ├── packet_monitor.go        # Live capture
-│   ├── ml_client.go            # Python communication
-│   └── go.mod                  # Go dependencies
+├── 📁 model_trainer/               # (Optional) Standalone training scripts
+│   ├── supervised_model_trainer.py
+│   ├── unsupervised_model_trainer.py
+│   └── ...
 │
-├── 📁 docs/                     # Documentation
-│   ├── architecture.md         # System design
-│   ├── demo_guide.md          # Presentation scripts
-│   └── evaluation.pdf         # Project report
+├── 📁 go_firewall/                 # Go Firewall Engine
+│   ├── main.go                     # CLI entry point
+│   ├── firewall.go                 # Core firewall logic
+│   ├── packet_monitor.go           # Live packet capture
+│   ├── ml_client.go                # ML service client
+│   ├── dashboard.go                 # Web dashboard server
+│   ├── 📁 static/                    # Dashboard assets (CSS, JS)
+│   ├── 📁 templates/                  # HTML templates
+│   └── go.mod
 │
-├── 📁 examples/                # Demo Materials
-│   ├── 📁 pcaps/             # Sample attack captures
-│   ├── attack_simulator.py   # Generate test traffic
-│   └── demo_commands.txt     # Copy-paste demo script
+├── 📁 examples/                    # Demo Materials
+│   ├── attack_simulator.py         # Generate test attacks
+│   └── 📁 pcaps/                   # Sample PCAP files
 │
-├── README.md                  # This file
-├── PROJECT_REPORT.pdf        # Final year project report
-└── LICENSE                   # MIT License
+├── 📁 docs/                        # Documentation
+│   ├── architecture.md
+│   └── demo_guide.md
+│
+├── README.md                       # This file
+└── LICENSE
 ```
 
 ---
@@ -541,22 +553,22 @@ ml-adaptive-firewall/
 ## 👥 **CONTRIBUTORS**
 
 ### **Project Lead**
-- **Biswajit Rout** - Final Year Student, Computer Science
+- **Biswajit Rout** – Final Year Student, Computer Science
   - ML Pipeline Development
   - Firewall Rule Engine
   - System Integration
 
 ### **Supervisor**
-- **Professor Name** - Department of Computer Science
+- **Professor Name** – Department of Computer Science
 
 ### **Acknowledgments**
-- Open source maintainers of scikit-learn, gopacket
+- Open source maintainers of scikit‑learn, XGBoost, gopacket, TensorFlow, Flask
 
 ---
 
 ## 📄 **LICENSE**
 
-**OTHER License** - All the rights are reserved.
+**OTHER License** – All rights reserved.
 
 ```
 Copyright (c) 2026 Biswajit Rout
@@ -585,15 +597,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 
 ## 🏆 **PROJECT SUMMARY**
 
-| **Title** | ML-Powered Adaptive Firewall System |
-|-----------|-------------------------------------|
-| **Author**| [Your Name], Final Year B.Tech CSE |
+| **Title** | ML‑Powered Adaptive Firewall System (5‑Class + Zero‑Day) |
+|-----------|---------------------------------------------------------|
+| **Author**| Biswajit Rout, Final Year B.Tech CSE |
 | **Supervisor** | [Professor Name] |
 | **Institution** | [Your University Name] |
-| **Year** | 2025 |
-| **Keywords** | Network Security, Machine Learning, Firewall, DDoS, Intrusion Detection |
-| **Technologies** | Python, scikit-learn, Go, gopacket, PCAP |
-| **GitHub** | [github.com/rout369/AA-NIPS-Adaptive-AI-Based-Network-Intrusion-Prevention-System-]([https://github.com/yourusername/ml-adaptive-firewall](https://github.com/rout369/AA-NIPS-Adaptive-AI-Based-Network-Intrusion-Prevention-System-)) |
+| **Year** | 2026 |
+| **Keywords** | Network Security, Machine Learning, Ensemble Learning, Autoencoder, Zero‑Day Detection, Firewall, DDoS, Intrusion Detection, NSL‑KDD, CIC‑IDS‑2017 |
+| **Technologies** | Python, scikit‑learn, XGBoost, TensorFlow, Flask, Go, gopacket, PCAP |
+| **GitHub** | [github.com/rout369/AA-NIPS-Adaptive-AI-Based-Network-Intrusion-Prevention-System-](https://github.com/rout369/AA-NIPS-Adaptive-AI-Based-Network-Intrusion-Prevention-System-) |
 
 ---
-
