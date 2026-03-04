@@ -382,7 +382,7 @@ pip install -r requirements.txt
 #    python unsupervised_model_trainer.py # trains autoencoder
 
 # 4. Start ML service
-cd ml_pipeline
+cd model_trainer
 python ml_service.py
 
 # In a new terminal:
@@ -393,8 +393,8 @@ go mod download
 go build -o firewall.exe
 ./firewall.exe --ml
 
-# 6. Generate test traffic (optional)
-python examples/attack_simulator.py --type port_scan
+# 6. simulate real time ddos attck on the network (optional - Use with care)
+python real_time_ddos.py 
 
 # 7. Open dashboard (after stopping monitoring with Ctrl+C)
 firewall> history
@@ -427,17 +427,16 @@ ML Blocks: 0
 ```
 ml-adaptive-firewall/
 │
-├── 📁 ml_pipeline/           # Python ML Service
+├── 📁 model_trainer/         # Standalone training scripts
 │   ├── ml_service.py         # Flask REST API
 │   ├── supervised_model_trainer.py
 │   ├── unsupervised_model_trainer.py
 │   ├── retrain.py
 │   ├── tuner_app.py
 │   ├── 📁 models/             # Saved models, scalers, weights
-│   ├── 📁 feedback/           # JSONL feedback files
-│   └── requirements.txt
-│
-├── 📁 model_trainer/         # Standalone training scripts
+│   ├── 📁 feedback/
+│   ├── 📁 static/             
+│   ├── 📁 tamplates/ 
 │
 ├── 📁 go_firewall/           # Go Firewall Engine
 │   ├── main.go               # CLI entry point
@@ -447,13 +446,13 @@ ml-adaptive-firewall/
 │   ├── dashboard.go          # Web dashboard server
 │   ├── 📁 static/             # Dashboard assets
 │   ├── 📁 templates/          # HTML templates
+│   ├──go.sum
+│   ├──real_time_ddos.py       #ddos attack simulation
 │   └── go.mod
 │
-├── 📁 examples/              # Demo Materials
-│   ├── attack_simulator.py
-│   └── 📁 pcaps/             # Sample PCAP files
-│
-├── 📁 docs/                  # Documentation
+├── 📁 pcapng_file/              # vcan store pcapng file for further anlysis or say static analysis
+├── 📁 model-trainer-prf/        # Contain the png , jpg , and json files as proof of model performance and training stats
+├── 📁 dataset1/                 # contain all the datset mostly the NSL-KDD and in future add the ICIDS-2017 trimed version
 ├── README.md
 └── LICENSE
 ```
@@ -467,9 +466,17 @@ ml-adaptive-firewall/
   - ML Pipeline Development
   - Firewall Rule Engine
   - System Integration
+  - datset refining
+- **Chavi Garg and Uttkarsh Srivastav** – Final Year Student, Computer Science
+  - datset cleaning 
+  - datset optimization 
+  - custom synthetic datset building
+- **Bobby Singh** – Final Year Student, Computer Science
+  - Also contribute to enhance the project ability  
+  
 
 ### **Supervisor**
-- **Professor Name** – Department of Computer Science
+- **Sir Ayush Singh** – Department of Computer Science
 
 ### **Acknowledgments**
 - Open source maintainers of scikit‑learn, XGBoost, gopacket, TensorFlow, Flask
@@ -510,12 +517,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 | **Title** | ML‑Powered Adaptive Firewall System (5‑Class + Zero‑Day) |
 |-----------|---------------------------------------------------------|
 | **Author**| Biswajit Rout, Final Year B.Tech CSE |
-| **Supervisor** | [Professor Name] |
-| **Institution** | [Your University Name] |
-| **Year** | 2026 |
+| **Supervisor** | Ayush Singh |
+| **Year** | 2025 - 2026 |
 | **Keywords** | Network Security, Machine Learning, Ensemble Learning, Autoencoder, Zero‑Day Detection, Firewall, DDoS, Intrusion Detection, NSL‑KDD, CIC‑IDS‑2017 |
 | **Technologies** | Python, scikit‑learn, XGBoost, TensorFlow, Flask, Go, gopacket, PCAP |
 | **GitHub** | [github.com/rout369/AA-NIPS-Adaptive-AI-Based-Network-Intrusion-Prevention-System-](https://github.com/rout369/AA-NIPS-Adaptive-AI-Based-Network-Intrusion-Prevention-System-) |
 
 ---
+
 
